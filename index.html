@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#e7dcc8">
+    <title>PaperTension — Guide the Ribbon Without Tearing It</title>
+    <meta name="description" content="PaperTension is a casual game about a delicate paper ribbon. Hold to tighten for sharp turns. Release to slacken through wider curves. One control, no separate steering.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fiber: #e7dcc8;
+            --sheet: #fbf6ec;
+            --ink: #241c16;
+            --muted: #6a5b4d;
+            --tear: #a33a2c;
+            --slack: #2f6d5e;
+            --kraft: #8d6b43;
+            --rule: rgba(36, 28, 22, 0.14);
+            --shadow: 0 18px 40px rgba(70, 46, 22, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Outfit, "Segoe UI", sans-serif;
+            color: var(--ink);
+            min-height: 100vh;
+            background-color: var(--fiber);
+            background-image:
+                radial-gradient(ellipse 70% 45% at 0% 0%, rgba(255, 250, 242, 0.85), transparent 55%),
+                radial-gradient(ellipse 42% 32% at 100% 8%, rgba(163, 58, 44, 0.09), transparent 50%),
+                repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(90, 58, 28, 0.025) 4px);
+        }
+
+        a { color: inherit; }
+
+        a:focus-visible, .btn:focus-visible {
+            outline: 2px solid var(--tear);
+            outline-offset: 3px;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 28px 22px 76px;
+        }
+
+        .bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 34px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand svg { width: 42px; height: 42px; flex: none; }
+
+        .brand strong {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 680;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+        }
+
+        .brand small {
+            display: block;
+            margin-top: 1px;
+            color: var(--tear);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .bar nav {
+            display: flex;
+            gap: 22px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .bar nav a { text-decoration: none; color: var(--muted); }
+        .bar nav a:hover { color: var(--ink); }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.08fr 0.92fr;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--kraft);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .eyebrow i {
+            width: 28px;
+            height: 2px;
+            background: var(--tear);
+            display: inline-block;
+        }
+
+        h1 {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 560;
+            font-size: clamp(2.35rem, 5.2vw, 4.35rem);
+            line-height: 0.98;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+        }
+
+        h1 em {
+            display: block;
+            font-style: italic;
+            font-weight: 560;
+            color: var(--tear);
+        }
+
+        .lede {
+            color: var(--muted);
+            font-size: 1.08rem;
+            line-height: 1.7;
+            max-width: 38rem;
+            margin-bottom: 18px;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+
+        .chips span {
+            background: var(--sheet);
+            border: 1px dashed rgba(141, 107, 67, 0.55);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 13px 18px;
+            transition: transform 0.16s ease;
+        }
+
+        .btn:hover { transform: translateY(-2px); }
+
+        .btn-go {
+            background: var(--ink);
+            color: var(--sheet);
+            box-shadow: 0 10px 24px rgba(36, 28, 22, 0.18);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--ink);
+            border: 1.5px solid rgba(36, 28, 22, 0.35);
+        }
+
+        .stage {
+            background: var(--sheet);
+            border-radius: 22px 18px 26px 16px;
+            box-shadow: var(--shadow);
+            padding: 16px 16px 18px;
+            position: relative;
+        }
+
+        .stage::before {
+            content: "";
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            top: 0;
+            height: 10px;
+            background:
+                radial-gradient(circle at 8px 0, transparent 7px, var(--fiber) 8px) left top / 16px 10px repeat-x;
+        }
+
+        .stage svg { width: 100%; height: auto; display: block; }
+
+        .gauge {
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 10px;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .gauge .track {
+            height: 8px;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--slack), #e6c36a 48%, var(--tear));
+            position: relative;
+        }
+
+        .gauge .needle {
+            position: absolute;
+            left: 58%;
+            top: -4px;
+            width: 3px;
+            height: 16px;
+            background: var(--ink);
+            border-radius: 2px;
+        }
+
+        .gauge .slack { color: var(--slack); }
+        .gauge .snap { color: var(--tear); }
+
+        .ribbon-flow {
+            stroke-dasharray: 18 10;
+            animation: unroll 2.8s linear infinite;
+        }
+
+        @keyframes unroll { to { stroke-dashoffset: -112; } }
+
+        .states {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .states article {
+            background: var(--sheet);
+            border-radius: 16px;
+            padding: 18px 16px 16px;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--kraft);
+        }
+
+        .states article:nth-child(1) { border-top-color: var(--slack); }
+        .states article:nth-child(3) { border-top-color: var(--tear); }
+
+        .states strong {
+            display: block;
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.35rem;
+            font-weight: 560;
+            margin-bottom: 6px;
+        }
+
+        .states p { color: var(--muted); line-height: 1.55; font-size: 0.95rem; }
+
+        .course {
+            margin-top: 56px;
+            display: grid;
+            grid-template-columns: 0.72fr 1.28fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        h2 {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 560;
+            font-size: clamp(1.8rem, 3vw, 2.45rem);
+            letter-spacing: -0.03em;
+            line-height: 1.08;
+        }
+
+        .course .intro p {
+            margin-top: 12px;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        ol.folds {
+            list-style: none;
+            background: var(--sheet);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        ol.folds li {
+            display: grid;
+            grid-template-columns: 84px 1fr;
+            gap: 8px;
+            padding: 18px 18px 16px;
+            border-top: 1px dashed var(--rule);
+        }
+
+        ol.folds li:first-child { border-top: 0; }
+
+        ol.folds b {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 560;
+            color: var(--tear);
+            font-size: 1.05rem;
+        }
+
+        ol.folds h3 {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 560;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        ol.folds p { color: var(--muted); line-height: 1.55; }
+
+        .notes {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 12px;
+        }
+
+        .note {
+            background: var(--sheet);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .note .label {
+            color: var(--kraft);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .note h3 {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 560;
+            font-size: 1.45rem;
+            margin-bottom: 8px;
+        }
+
+        .note p { color: var(--muted); line-height: 1.65; }
+
+        .pair { display: flex; flex-direction: column; gap: 12px; }
+
+        .band {
+            margin-top: 28px;
+            background: var(--ink);
+            color: var(--sheet);
+            border-radius: 20px;
+            padding: 22px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .band p { line-height: 1.55; max-width: 40rem; color: rgba(251, 246, 236, 0.86); }
+        .band strong { color: var(--sheet); }
+        .band .btn-go { background: var(--sheet); color: var(--ink); }
+
+        footer {
+            margin-top: 26px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        footer a { color: var(--tear); text-decoration: none; font-weight: 600; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 860px) {
+            .hero, .states, .course, .notes { grid-template-columns: 1fr; }
+            .bar { align-items: flex-start; flex-wrap: wrap; }
+            .bar nav { width: 100%; }
+            .actions { flex-direction: column; align-items: stretch; }
+            ol.folds li { grid-template-columns: 64px 1fr; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .ribbon-flow { animation: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header class="bar">
+            <a class="brand" href="index.html">
+                <svg viewBox="0 0 42 42" aria-hidden="true">
+                    <rect x="3" y="6" width="36" height="30" rx="4" fill="#fbf6ec" stroke="#241c16" stroke-width="1.4"/>
+                    <path d="M8 28 C14 18, 18 30, 24 16 C28 8, 30 20, 35 12" fill="none" stroke="#a33a2c" stroke-width="2.4" stroke-linecap="round"/>
+                </svg>
+                <span>
+                    <strong>PaperTension</strong>
+                    <small>Ribbon course</small>
+                </span>
+            </a>
+            <nav>
+                <a href="#play">How to play</a>
+                <a href="privacy.html">Privacy</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <div>
+                <p class="eyebrow"><i></i> Casual · Free · iPhone &amp; iPad</p>
+                <h1>Hold the paper.<em>Don’t tear it.</em></h1>
+                <p class="lede">
+                    PaperTension unrolls a delicate ribbon through narrow pathways. There is no steering stick. Hold to raise tension and cut a sharp corner. Release so the sheet slackens and glides through a wider bend. Too tight, and the paper snaps. Too loose, and it drifts off the course.
+                </p>
+                <div class="chips">
+                    <span>One tension control</span>
+                    <span>Hold for tight turns</span>
+                    <span>Release for wide curves</span>
+                    <span>Age 4+</span>
+                    <span>English</span>
+                </div>
+                <div class="actions">
+                    <a class="btn btn-go" href="https://apps.apple.com/us/app/papertension/id6813483686?uo=4" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
+                    <a class="btn btn-ghost" href="privacy.html">Privacy note</a>
+                </div>
+            </div>
+            <div class="stage">
+                <svg viewBox="0 0 360 430" role="img" aria-label="A paper ribbon threading between narrow walls">
+                    <rect x="28" y="24" width="78" height="150" rx="8" fill="#d7c4a4"/>
+                    <rect x="250" y="18" width="82" height="120" rx="8" fill="#cbb48e"/>
+                    <rect x="36" y="250" width="96" height="140" rx="8" fill="#cbb48e"/>
+                    <rect x="228" y="210" width="104" height="168" rx="8" fill="#d7c4a4"/>
+                    <path d="M168 8 C168 70 248 78 248 150 C248 214 112 196 112 286 C112 352 210 338 198 422" fill="none" stroke="#241c16" stroke-width="22" stroke-linecap="round" opacity="0.08"/>
+                    <path d="M168 8 C168 70 248 78 248 150 C248 214 112 196 112 286 C112 352 210 338 198 422" fill="none" stroke="#fffdf8" stroke-width="16" stroke-linecap="round"/>
+                    <path class="ribbon-flow" d="M168 8 C168 70 248 78 248 150 C248 214 112 196 112 286 C112 352 210 338 198 422" fill="none" stroke="#a33a2c" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>
+                    <circle cx="248" cy="150" r="7" fill="#a33a2c"/>
+                    <circle cx="112" cy="286" r="6" fill="#2f6d5e"/>
+                </svg>
+                <div class="gauge" aria-hidden="true">
+                    <span class="slack">Slack</span>
+                    <span class="track"><span class="needle"></span></span>
+                    <span class="snap">Tear</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="states" aria-label="Three tension states">
+            <article>
+                <strong>Slack</strong>
+                <p>Let go and the ribbon loosens. A wide curve stays smooth. Too much slack and the strip wanders off the path.</p>
+            </article>
+            <article>
+                <strong>Hold</strong>
+                <p>Press to pull the sheet tighter. The turn sharpens because the angle comes from tension, not from a second control.</p>
+            </article>
+            <article>
+                <strong>Tear</strong>
+                <p>Over-stretch for a fraction of a second and the paper snaps. The course ends the moment the ribbon fails.</p>
+            </article>
+        </section>
+
+        <section class="course" id="play">
+            <div class="intro">
+                <h2>A single pull decides the whole line.</h2>
+                <p>The strip keeps moving forward. Your job is the balance between pull and slack, read one corner ahead so a tight gap does not arrive while the sheet is already stressed.</p>
+            </div>
+            <ol class="folds">
+                <li>
+                    <b>Unroll</b>
+                    <div>
+                        <h3>Watch the path arrive</h3>
+                        <p>A continuous paper strip feeds into narrow passages. Obstacles are already set. You do not draw a new route.</p>
+                    </div>
+                </li>
+                <li>
+                    <b>Hold</b>
+                    <div>
+                        <h3>Tighten for a sharp bend</h3>
+                        <p>Hold to increase tension. The ribbon commits to a tighter turn. Release late and the stress climbs toward a tear.</p>
+                    </div>
+                </li>
+                <li>
+                    <b>Release</b>
+                    <div>
+                        <h3>Slacken for a wider glide</h3>
+                        <p>Let go at the moment a broad curve needs room. The sheet relaxes, keeps direction, and stops fighting the corner.</p>
+                    </div>
+                </li>
+                <li>
+                    <b>Read</b>
+                    <div>
+                        <h3>Anticipate the next pinch</h3>
+                        <p>Later courses leave less time between bends. A clean run is a sequence of holds and releases, not a faster finger.</p>
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <section class="notes" aria-label="Game details">
+            <article class="note">
+                <p class="label">The control</p>
+                <h3>Trajectory is the tension.</h3>
+                <p>There is no separate steering input. How hard you pull the paper sets both the angle and the path. Managing that pull is the entire skill: enough grip to make the corner, enough give to keep the sheet whole.</p>
+            </article>
+            <div class="pair">
+                <article class="note">
+                    <p class="label">The courses</p>
+                    <h3>Gaps get meaner.</h3>
+                    <p>Early bends forgive a late release. Later pathways ask you to see the pinch before the ribbon is already stretched.</p>
+                </article>
+                <article class="note">
+                    <p class="label">On device</p>
+                    <h3>iOS 15 or later.</h3>
+                    <p>Free casual game in English for iPhone and iPad. Designed for iPad. The App Store age rating is 4+.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="band">
+            <p><strong>Support stays on the product page.</strong> Questions about PaperTension, including privacy, go through the support options on its App Store listing.</p>
+            <a class="btn btn-go" href="https://apps.apple.com/us/app/papertension/id6813483686?uo=4" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
+        </section>
+
+        <footer>
+            <p>© 2026 PaperTension. A casual ribbon game for iPhone and iPad.</p>
+            <p><a href="privacy.html">Privacy</a> · <a href="https://apps.apple.com/us/app/papertension/id6813483686?uo=4" target="_blank" rel="noopener noreferrer">App Store</a></p>
+        </footer>
+    </div>
+</body>
+</html>

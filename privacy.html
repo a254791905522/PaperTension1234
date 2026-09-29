@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#e7dcc8">
+    <title>Privacy — PaperTension</title>
+    <meta name="description" content="Privacy note for PaperTension. The App Store label states that the developer does not collect data from this app. Play stays on your device.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fiber: #e7dcc8;
+            --sheet: #fbf6ec;
+            --ink: #241c16;
+            --muted: #6a5b4d;
+            --tear: #a33a2c;
+            --slack: #2f6d5e;
+            --kraft: #8d6b43;
+            --rule: rgba(36, 28, 22, 0.14);
+            --shadow: 0 18px 40px rgba(70, 46, 22, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Outfit, "Segoe UI", sans-serif;
+            color: var(--ink);
+            min-height: 100vh;
+            background-color: var(--fiber);
+            background-image:
+                radial-gradient(ellipse 60% 40% at 100% 0%, rgba(255, 250, 242, 0.8), transparent 52%),
+                radial-gradient(ellipse 36% 28% at 0% 100%, rgba(47, 109, 94, 0.08), transparent 48%),
+                repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(90, 58, 28, 0.025) 4px);
+        }
+
+        a:focus-visible, .btn:focus-visible {
+            outline: 2px solid var(--tear);
+            outline-offset: 3px;
+        }
+
+        .wrap {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 28px 22px 76px;
+        }
+
+        .bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand svg { width: 42px; height: 42px; flex: none; }
+
+        .brand strong {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 680;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+        }
+
+        .brand small {
+            display: block;
+            margin-top: 1px;
+            color: var(--tear);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .bar nav { display: flex; gap: 22px; font-weight: 600; font-size: 0.95rem; }
+        .bar nav a { color: var(--muted); text-decoration: none; }
+        .bar nav a:hover, .bar nav a[aria-current="page"] { color: var(--ink); }
+
+        .sheet {
+            background: var(--sheet);
+            border-radius: 6px 18px 18px 6px;
+            box-shadow: var(--shadow);
+            padding: 36px 34px 28px 48px;
+            position: relative;
+        }
+
+        .sheet::before {
+            content: "";
+            position: absolute;
+            left: 18px;
+            top: 22px;
+            bottom: 22px;
+            width: 10px;
+            background:
+                radial-gradient(circle, #e7dcc8 4px, transparent 4.5px) center top / 10px 28px repeat-y;
+        }
+
+        .dated {
+            color: var(--kraft);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 560;
+            font-size: clamp(2rem, 4.4vw, 3.15rem);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 14px;
+        }
+
+        .lead {
+            color: var(--muted);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 22px;
+        }
+
+        .seal {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .seal span {
+            border: 1.5px solid var(--slack);
+            color: var(--slack);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .fold {
+            margin-top: 26px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--rule);
+        }
+
+        .fold h2 {
+            font-family: Fraunces, Georgia, serif;
+            font-weight: 560;
+            font-size: 1.45rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .fold p {
+            color: #3d342c;
+            line-height: 1.7;
+            font-size: 1.02rem;
+        }
+
+        .fold p + p { margin-top: 10px; }
+
+        .margin-note {
+            margin-top: 12px;
+            padding: 12px 14px;
+            background: rgba(163, 58, 44, 0.06);
+            border-left: 3px solid var(--tear);
+            color: var(--muted);
+            font-family: Fraunces, Georgia, serif;
+            font-style: italic;
+            line-height: 1.55;
+        }
+
+        .close {
+            margin-top: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            padding-top: 18px;
+            border-top: 1px solid var(--rule);
+        }
+
+        .close p { color: var(--muted); line-height: 1.55; max-width: 34rem; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 12px 16px;
+            background: var(--ink);
+            color: var(--sheet);
+            white-space: nowrap;
+        }
+
+        footer {
+            margin-top: 22px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        footer a { color: var(--tear); text-decoration: none; font-weight: 600; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 700px) {
+            .sheet { padding: 28px 18px 22px 36px; }
+            .bar { align-items: flex-start; flex-wrap: wrap; }
+            .bar nav { width: 100%; }
+            .close .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header class="bar">
+            <a class="brand" href="index.html">
+                <svg viewBox="0 0 42 42" aria-hidden="true">
+                    <rect x="3" y="6" width="36" height="30" rx="4" fill="#fbf6ec" stroke="#241c16" stroke-width="1.4"/>
+                    <path d="M8 28 C14 18, 18 30, 24 16 C28 8, 30 20, 35 12" fill="none" stroke="#a33a2c" stroke-width="2.4" stroke-linecap="round"/>
+                </svg>
+                <span>
+                    <strong>PaperTension</strong>
+                    <small>Ribbon course</small>
+                </span>
+            </a>
+            <nav>
+                <a href="index.html">The game</a>
+                <a href="privacy.html" aria-current="page">Privacy</a>
+            </nav>
+        </header>
+
+        <article class="sheet">
+            <p class="dated">Privacy note · 29 September 2026</p>
+            <h1>The ribbon stays on your device.</h1>
+            <p class="lead">
+                PaperTension is a casual game: you guide an unrolling paper strip by holding and releasing tension. This note explains the privacy label Apple shows for that app. It is written for players and families. It is not a legal opinion about the law where you live.
+            </p>
+            <div class="seal" aria-label="Store privacy summary">
+                <span>Data not collected</span>
+                <span>No account</span>
+                <span>Age 4+</span>
+            </div>
+
+            <section class="fold" id="hands">
+                <h2>What your hands do</h2>
+                <p>
+                    Play is a single action. Hold to pull the ribbon tight for a sharp turn. Release so it slackens through a wider curve. The strip, the obstacles, and the tear when you over-stretch are the game itself, running on the iPhone or iPad where you installed it.
+                </p>
+                <p>
+                    The App Store listing does not describe a login, a public name, chat, or a friends list. You are not asked to type a phone number, a photo, a home address, or a precise location to thread the course.
+                </p>
+            </section>
+
+            <section class="fold" id="label">
+                <h2>What the store label says</h2>
+                <p>
+                    Apple’s privacy section for PaperTension states that data is not collected. In that label, the developer does not collect data from this app. This page does not invent extra categories on top of that statement.
+                </p>
+                <p>
+                    Apple also notes that privacy practices can vary, for example with the features you use or with your age. The live label on the App Store product page is the place to check if that wording changes.
+                </p>
+                <p class="margin-note">If the label says nothing is collected, this note does not add a private list of events, identifiers, or partners.</p>
+            </section>
+
+            <section class="fold" id="apple">
+                <h2>Apple still delivers the app</h2>
+                <p>
+                    PaperTension is distributed on the App Store. Downloading, updating, and the privacy switches in iOS and iPadOS are Apple platform activity. Those steps follow Apple’s terms and Apple’s privacy policy, including whatever your Apple ID and device settings already cover.
+                </p>
+                <p>
+                    Removing PaperTension removes the local copy the system kept for that app. If you use a device backup you turned on yourself, such as iCloud Backup, that backup follows Apple’s backup settings.
+                </p>
+            </section>
+
+            <section class="fold" id="page">
+                <h2>This page is only an introduction</h2>
+                <p>
+                    The PaperTension pages here describe the game and this privacy note. They do not open an account, do not ask you to sign in, and do not include a message form. The only off-site link is the App Store listing for the game.
+                </p>
+            </section>
+
+            <section class="fold" id="home">
+                <h2>Households and younger players</h2>
+                <p>
+                    The App Store age rating is 4+. A parent or guardian decides whether to install the game. Screen Time, Ask to Buy, and Family Sharing can limit or approve installs where those Apple tools are available.
+                </p>
+                <p>
+                    The listing does not require a child to create a profile before the ribbon starts unrolling. If you believe a child sent personal information to the publisher outside ordinary play, use the support options on the App Store product page so the request can be reviewed.
+                </p>
+            </section>
+
+            <section class="fold" id="ask">
+                <h2>How to ask a question</h2>
+                <p>
+                    Depending on where you live, you may have rights to access, correct, or delete personal information, or to object to certain uses. PaperTension does not publish a personal email address or a personal website for those requests.
+                </p>
+                <p>
+                    Send questions through the support options on the PaperTension App Store listing. Say what you are asking and include only the detail needed to find the request.
+                </p>
+            </section>
+
+            <section class="fold" id="reprint">
+                <h2>If this note is rewritten</h2>
+                <p>
+                    If a later version of PaperTension starts collecting data, this page will be replaced with a dated revision, and the App Store privacy label should be updated to match. Until that happens, the practice described here is on-device ribbon play under a store label of data not collected.
+                </p>
+                <p>The date at the top is the date of this wording.</p>
+            </section>
+
+            <div class="close">
+                <p>The current listing, the privacy label, and support for PaperTension all live on the App Store page.</p>
+                <a class="btn" href="https://apps.apple.com/us/app/papertension/id6813483686?uo=4" target="_blank" rel="noopener noreferrer">Download on the App Store</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>© 2026 PaperTension. Privacy note for the ribbon game.</p>
+            <p><a href="index.html">The game</a> · <a href="https://apps.apple.com/us/app/papertension/id6813483686?uo=4" target="_blank" rel="noopener noreferrer">App Store</a></p>
+        </footer>
+    </div>
+</body>
+</html>
